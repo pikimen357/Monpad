@@ -19,9 +19,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         with(binding){
-            btnMasukLie.setOnClickListener {
+            btnMahasiswa.setOnClickListener {
                 startActivity(Intent(this@MainActivity,
                     Mahasiswa::class.java))
+            }
+
+            btnAsisten.setOnClickListener {
+                startActivity(Intent(this@MainActivity,
+                    Asisten::class.java))
             }
         }
 

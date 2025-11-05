@@ -9,10 +9,17 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/btn_masuk_lie"
+        android:id="@+id/btn_mahasiswa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="MASUK"/>
+        android:text="Data Mahasiswa"/>
+
+    <Button
+        android:id="@+id/btn_Asisten"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Data Asisten"/>
 
 </LinearLayout>
