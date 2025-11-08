@@ -10,28 +10,35 @@
 
     <Button
         android:id="@+id/btn_mahasiswa"
-        android:layout_width="wrap_content"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Data Mahasiswa"/>
 
     <Button
         android:id="@+id/btn_Asisten"
-        android:layout_width="wrap_content"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Data Asisten"/>
 
     <Button
+        android:id="@+id/btn_dosen"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Data Dosen"/>
+
+    <Button
         android:id="@+id/btn_project"
-        android:layout_width="wrap_content"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Data Projek"/>
 
     <Button
         android:id="@+id/btn_Nilai"
-        android:layout_width="wrap_content"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Data nilai"/>

@@ -29,6 +29,11 @@ class MainActivity : AppCompatActivity() {
                     Asisten::class.java))
             }
 
+            btnDosen.setOnClickListener {
+                startActivity(Intent(this@MainActivity,
+                    Dosen::class.java))
+            }
+
             btnProject.setOnClickListener {
                 startActivity(Intent(this@MainActivity,
                     ProjectActivity::class.java))
