@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Monpad">
         <activity
+            android:name=".NilaiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProjectActivity"
+            android:exported="false" />
+        <activity
             android:name=".Asisten"
             android:exported="false" />
         <activity

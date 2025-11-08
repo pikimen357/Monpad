@@ -28,6 +28,16 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this@MainActivity,
                     Asisten::class.java))
             }
+
+            btnProject.setOnClickListener {
+                startActivity(Intent(this@MainActivity,
+                    ProjectActivity::class.java))
+            }
+
+            btnNilai.setOnClickListener {
+                startActivity(Intent(this@MainActivity,
+                    NilaiActivity::class.java))
+            }
         }
 
     }
