@@ -43,7 +43,7 @@ fun NilaiMahasiswaScreen() {
                     .padding(16.dp)
             ) {
                 // Header Card
-                HeaderCard()
+                HeaderCardNilai()
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -60,6 +60,45 @@ fun NilaiMahasiswaScreen() {
                     Spacer(modifier = Modifier.height(16.dp))
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun HeaderCardNilai() {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(
+                    text = "Nilai Mahasiswa",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Beranda > Nilai Mahasiswa",
+                    fontSize = 12.sp,
+                    color = Color.Gray
+                )
+            }
+
+            Icon(
+                imageVector = Icons.Default.AccountCircle,
+                contentDescription = "Profile",
+                modifier = Modifier.size(32.dp),
+                tint = Color(0xFF6B4BA6)
+            )
         }
     }
 }
