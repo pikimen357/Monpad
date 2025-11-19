@@ -43,6 +43,11 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this@MainActivity,
                     NilaiActivity::class.java))
             }
+
+            btnDashboardMhs.setOnClickListener {
+                startActivity(Intent(this@MainActivity,
+                    DashboardMahasiswaActivity::class.java))
+            }
         }
 
     }
