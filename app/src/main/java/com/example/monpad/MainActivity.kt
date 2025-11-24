@@ -2,6 +2,7 @@ package com.example.monpad
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -44,10 +45,20 @@ class MainActivity : AppCompatActivity() {
                     NilaiActivity::class.java))
             }
 
-            btnDashboardMhs.setOnClickListener {
-                startActivity(Intent(this@MainActivity,
-                    DashboardMahasiswaActivity::class.java))
+            btnLogin.setOnClickListener {
+                Log.d("MainActivity", "Button clicked")
+                try {
+                    startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                    Log.d("MainActivity", "Intent started")
+                } catch (e: Exception) {
+                    Log.e("MainActivity", "Error: ${e.message}")
+                }
             }
+
+//            btnDashboardMhs.setOnClickListener {
+//                startActivity(Intent(this@MainActivity,
+//                    DashboardMahasiswaActivity::class.java))
+//            }
         }
 
     }
