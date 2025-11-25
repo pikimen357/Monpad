@@ -74,6 +74,14 @@ dependencies {
     // Image Loading (Coil)
     implementation("io.coil-kt:coil-compose:2.7.0")
 
+
+    // DataStore untuk menyimpan token
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    // ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)

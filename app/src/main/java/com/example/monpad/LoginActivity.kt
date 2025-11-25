@@ -1,5 +1,6 @@
 package com.example.monpad
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,7 +14,13 @@ class LoginActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MonpadTheme {
-                LoginScreen()
+                LoginScreen(
+                    onLoginSuccess = {
+                        // Navigate ke MainActivity atau Dashboard
+                        startActivity(Intent(this, MainActivity::class.java))
+                        finish()
+                    }
+                )
             }
         }
     }
