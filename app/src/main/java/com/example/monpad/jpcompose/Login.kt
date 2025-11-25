@@ -83,7 +83,7 @@ fun LoginScreen(
         ) {
             Column(
                 modifier = Modifier
-                    .width(320.dp)
+                    .width(370.dp)
                     .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -115,7 +115,7 @@ fun LoginScreen(
                             color = Color(0xFF1A141F),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 4.dp)
+                                .padding(top = 10.dp)
                         )
 
                         OutlinedTextField(
@@ -152,7 +152,7 @@ fun LoginScreen(
                             color = Color(0xFF1A141F),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 12.dp)
+                                .padding(top = 20.dp)
                         )
 
                         OutlinedTextField(
@@ -236,7 +236,7 @@ fun LoginScreen(
                             enabled = loginState !is LoginState.Loading,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 16.dp)
+                                .padding(top = 24.dp)
                                 .height(45.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF52357B)

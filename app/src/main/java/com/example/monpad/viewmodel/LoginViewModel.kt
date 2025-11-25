@@ -9,6 +9,7 @@ import com.example.monpad.network.RetrofitClient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 sealed class LoginState {
     object Idle : LoginState()
@@ -50,9 +51,13 @@ class LoginViewModel(context: Context) : ViewModel() {
                     }
                 } else {
                     val errorBody = response.errorBody()?.string()
-                    _loginState.value = LoginState.Error(
-                        errorBody ?: "Error: ${response.code()}"
-                    )
+                    val message = try {
+                        JSONObject(errorBody).getString("message")
+                    } catch (e: Exception) {
+                        "Login gagal. Coba lagi."
+                    }
+                    _loginState.value = LoginState.Error(message)
+                    return@launch
                 }
             } catch (e: Exception) {
                 _loginState.value = LoginState.Error(
