@@ -1,16 +1,31 @@
 package com.example.monpad.jpcompose
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -18,11 +33,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.monpad.network.FinalizationData
+import com.example.monpad.viewmodel.FinalizationViewModel
 
 @Composable
-fun NilaiMahasiswaScreen() {
+fun NilaiMahasiswaScreen(viewModel: FinalizationViewModel) {
+    val finalizationData by viewModel.finalizationData.observeAsState(initial = null)
+    val error by viewModel.error.observeAsState(initial = null)
+
     Scaffold(
-        bottomBar = { BottomNavigationBar() }
+        bottomBar = { BottomNavigationBar() } 
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -42,22 +62,27 @@ fun NilaiMahasiswaScreen() {
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
-                // Header Card
                 HeaderCardNilai()
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Scrollable Student Cards
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    repeat(5) {
-                        StudentGradeCard()
+                Box(modifier = Modifier.fillMaxSize()) {
+                    finalizationData?.let {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(it) { data ->
+                                StudentGradeCard(data = data)
+                            }
+                        }
+                    } ?: run {
+                        if (error != null) {
+                            Text(text = error!!, color = Color.Red, modifier = Modifier.align(Alignment.Center))
+                        } else {
+                            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                        }
                     }
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }
@@ -104,7 +129,7 @@ fun HeaderCardNilai() {
 }
 
 @Composable
-fun StudentGradeCard() {
+fun StudentGradeCard(data: FinalizationData) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -116,13 +141,13 @@ fun StudentGradeCard() {
                 .fillMaxWidth()
                 .padding(20.dp)
         ) {
-            StudentInfoRow(label = "Nama Mahasiswa :", value = "")
+            StudentInfoRow(label = "Nama Mahasiswa :", value = data.user.username)
             Spacer(modifier = Modifier.height(10.dp))
 
-            StudentInfoRow(label = "NIM :", value = "")
+            StudentInfoRow(label = "NIM :", value = data.user.nim)
             Spacer(modifier = Modifier.height(10.dp))
 
-            StudentInfoRow(label = "Nilai Akhir :", value = "")
+            StudentInfoRow(label = "Nilai Akhir :", value = data.final_grade)
         }
     }
 }

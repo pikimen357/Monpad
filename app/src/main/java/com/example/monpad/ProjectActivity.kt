@@ -1,16 +1,20 @@
 package com.example.monpad
 
-import com.example.monpad.jpcompose.ProjectGroupScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.*
+import androidx.activity.viewModels
+import com.example.monpad.jpcompose.ProjectGroupScreen
+import com.example.monpad.viewmodel.ProjectViewModel
 
 class ProjectActivity : ComponentActivity() {
+    private val projectViewModel: ProjectViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ProjectGroupScreen()
+            ProjectGroupScreen(projectViewModel)
         }
+        projectViewModel.getProjects()
     }
 }

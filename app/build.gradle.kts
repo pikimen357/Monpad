@@ -77,6 +77,7 @@ dependencies {
 
     // DataStore untuk menyimpan token
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("javax.inject:javax.inject:1")
 
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
@@ -86,4 +87,7 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.7")
+
 }
