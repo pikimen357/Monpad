@@ -15,6 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Monpad">
         <activity
+            android:name=".jpcompose.DashboardDosen"
+            android:exported="false"
+            android:label="@string/title_activity_dashboard_dosen_screen"
+            android:theme="@style/Theme.Monpad" />
+        <activity
             android:name=".jpcompose.Login"
             android:exported="false"
             android:label="@string/title_activity_login"
@@ -47,9 +52,6 @@
             android:name=".LoginActivity"
             android:exported="false"
             android:theme="@style/Theme.Monpad" />
-<!--        <activity-->
-<!--            android:name=".DashboardMahasiswaActivity"-->
-<!--            android:exported="false" />-->
     </application>
 
 </manifest>

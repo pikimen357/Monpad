@@ -45,6 +45,12 @@ class MainActivity : AppCompatActivity() {
                     NilaiActivity::class.java))
             }
 
+            // Di MainActivity
+            btnDashboardDosen.setOnClickListener {
+                startActivity(Intent(this@MainActivity,
+                    com.example.monpad.jpcompose.DashboardDosen::class.java))
+            }
+
             btnLogin.setOnClickListener {
                 Log.d("MainActivity", "Button clicked")
                 try {

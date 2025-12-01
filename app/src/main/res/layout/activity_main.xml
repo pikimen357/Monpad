@@ -57,4 +57,11 @@
         android:layout_marginTop="16dp"
         android:text="Dashboard Mahasiswa"/>
 
+    <Button
+        android:id="@+id/btn_DashboardDosen"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Dashboard Dosen"/>
+
 </LinearLayout>
