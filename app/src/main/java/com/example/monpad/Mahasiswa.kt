@@ -1,20 +1,24 @@
 package com.example.monpad
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.monpad.databinding.ActivityMahasiswaBinding
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import com.example.monpad.jpcompose.DataMahasiswaScreen
+import com.example.monpad.viewmodel.StudentViewModel
 
-class Mahasiswa : AppCompatActivity() {
+class Mahasiswa : ComponentActivity() {
 
-    private lateinit var binding: ActivityMahasiswaBinding
+    private val studentViewModel: StudentViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMahasiswaBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
+        setContent {
+            DataMahasiswaScreen(studentViewModel)
+        }
+
+        // Fetch data mahasiswa
+        studentViewModel.getMahasiswa()
     }
 }

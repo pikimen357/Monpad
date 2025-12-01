@@ -1,20 +1,24 @@
 package com.example.monpad
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.monpad.databinding.ActivityDosenBinding
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import com.example.monpad.jpcompose.DataDosenScreen
+import com.example.monpad.viewmodel.DosenViewModel
 
-class Dosen : AppCompatActivity() {
+class Dosen : ComponentActivity() {
 
-    private lateinit var binding: ActivityDosenBinding
+    private val dosenViewModel: DosenViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityDosenBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContent {
+            DataDosenScreen(dosenViewModel)
+        }
+
+        // Fetch data dosen
+        dosenViewModel.getDosen()
     }
 }

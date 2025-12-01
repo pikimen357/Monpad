@@ -54,6 +54,10 @@ data class Owner(
     val fakultas: String
 )
 
+data class AssistantResponse(
+    val data: List<Assistant>
+)
+
 data class Assistant(
     val id: Int,
     val username: String,
@@ -76,6 +80,10 @@ data class FinalizationData(
     val confirmed: Int
 )
 
+data class MahasiswaResponse(
+    val data: List<Student>
+)
+
 data class Student(
     val id: Int,
     val username: String,
@@ -84,6 +92,18 @@ data class Student(
     val angkatan: String,
     val prodi: String,
     val jabatan: String
+)
+
+data class DosenResponse(
+    val data: List<Dosen>
+)
+
+data class Dosen(
+    val id: Int,
+    val username: String,
+    val email: String,
+    val nidn: String,
+    val fakultas: String
 )
 
 data class Group(
@@ -99,6 +119,16 @@ interface ApiService {
 
     @GET("api/project")
     suspend fun getProjects(@Header("Authorization") token: String): Response<ProjectResponse>
+
+    @GET("api/mahasiswa")
+    suspend fun getMahasiswa(@Header("Authorization") token: String): Response<MahasiswaResponse>
+
+    @GET("api/asisten")
+    suspend fun getAsisten(@Header("Authorization") token: String): Response<AssistantResponse>
+
+
+    @GET("api/dosen")
+    suspend fun getDosen(@Header("Authorization") token: String): Response<DosenResponse>
 
     @GET("api/finalization/")
     suspend fun getFinalizationData(@Header("Authorization") token: String): Response<FinalizationResponse>
