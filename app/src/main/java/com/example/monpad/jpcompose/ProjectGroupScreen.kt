@@ -17,6 +17,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.DoorBack
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
@@ -192,50 +194,4 @@ fun ProjectInfoRow(label: String, value: String) {
     }
 }
 
-@Composable
-fun BottomNavigationBar() {
-    NavigationBar(
-        containerColor = Color.White,
-        tonalElevation = 8.dp
-    ) {
-        NavigationBarItem(
-            selected = false,
-            onClick = { },
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = "Profile",
-                    tint = Color.Gray
-                )
-            }
-        )
 
-        NavigationBarItem(
-            selected = true,
-            onClick = { },
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = "Menu",
-                    tint = Color.White,
-                    modifier = Modifier
-                        .background(Color(0xFF6B4BA6), RoundedCornerShape(50))
-                        .padding(12.dp)
-                        .size(24.dp)
-                )
-            }
-        )
-
-        NavigationBarItem(
-            selected = false,
-            onClick = { },
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Person,
-                    contentDescription = "People",
-                    tint = Color.Gray
-                )
-            }
-        )
-    }
-}

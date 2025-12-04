@@ -167,12 +167,21 @@ fun HeaderSection(onMenuClick: () -> Unit) {
 // ... (Kode StatCard, ProjectsAndGroupsSection, DashboardBottomNavBar) ...
 
 @Composable
-fun StatCard(indicatorColor: Color, count: String, label: String) { /* ... (Kode StatCard) ... */ }
+fun StatCard(indicatorColor: Color, count: String, label: String) {
+    // Implementation can be added here or kept as is if defined elsewhere
+}
 @Composable
-fun ProjectsAndGroupsSection() { /* ... (Kode ProjectsAndGroupsSection) ... */ }
+fun ProjectsAndGroupsSection() {
+    // Implementation can be added here or kept as is if defined elsewhere
+}
 @Composable
-fun DashboardBottomNavBar() { /* ... (Kode DashboardBottomNavBar) ... */ }
-
+fun DashboardBottomNavBar() {
+    // Calling the renamed composable from the other file.
+    // Note: The original file for BottomNavigationBar had hardcoded intents.
+    // These were removed in the refactor to make the component more reusable.
+    // The correct navigation logic should be passed via onClick parameters if needed.
+    BottomNavigationBar()
+}
 
 // --- KOMPONEN SIDEBAR (AppDrawer dan DrawerItem) ---
 

@@ -74,7 +74,7 @@ data class FinalizationResponse(
 data class FinalizationData(
     val user: Student,
     val group: Group,
-    val project_grade: Int,
+    val project_grade: Double,
     val personal_grade: String,
     val final_grade: String,
     val confirmed: Int
