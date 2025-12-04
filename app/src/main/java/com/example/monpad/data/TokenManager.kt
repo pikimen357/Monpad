@@ -60,6 +60,11 @@ class TokenManager(private val context: Context) {
         return userRole.firstOrNull()
     }
 
+    suspend fun getUserName(): String? {
+        return userName.firstOrNull()
+    }
+
+
     // ⭐ TAMBAHKAN fungsi suspend untuk mendapatkan token secara langsung
     suspend fun getToken(): String? {
         return token.firstOrNull()

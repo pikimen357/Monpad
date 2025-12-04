@@ -2,6 +2,7 @@ package com.example.monpad
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -59,7 +60,9 @@ class LoginActivity : ComponentActivity() {
         lifecycleScope.launch {
             // ⭐ Gunakan suspend function untuk get role
             val role = tokenManager.getUserRole()
+            val name = tokenManager.getUserName()
 
+            Toast.makeText(this@LoginActivity, "Login $name Berhasil!", Toast.LENGTH_SHORT).show()
             val intent = when (role?.lowercase()) {
                 "dosen" -> {
                     // Arahkan ke Dashboard Dosen
@@ -67,6 +70,7 @@ class LoginActivity : ComponentActivity() {
                 }
                 "mahasiswa" -> {
                     // Arahkan ke Dashboard Mahasiswa
+
                     Intent(this@LoginActivity, MainActivity::class.java)
                 }
                 "admin" -> {

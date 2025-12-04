@@ -61,10 +61,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-//            btnDashboardMhs.setOnClickListener {
-//                startActivity(Intent(this@MainActivity,
-//                    DashboardMahasiswaActivity::class.java))
-//            }
+            btnDashboardMhs.setOnClickListener {
+                startActivity(Intent(this@MainActivity,
+                    DashboardMahasiswa::class.java))
+            }
         }
 
     }
