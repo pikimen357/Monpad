@@ -92,7 +92,7 @@ fun DashboardAssitenContent() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
-                        .padding(top = 16.dp)
+                        .padding(top = 50.dp)
                 ) {
                     StatMhsCard(
                         indicatorColor = CardPurple,
@@ -102,20 +102,43 @@ fun DashboardAssitenContent() {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     StatMhsCard(
-                        indicatorColor = CardBlue,
-                        count = "X",
-                        label = "Asisten Praktikum"
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    StatMhsCard(
                         indicatorColor = CardPurple,
                         count = "XX",
                         label = "Proyek Aktif"
                     )
-                    Spacer(modifier = Modifier.height(32.dp))
 
-                    ProjectsAndGroupsSectionMhs()
+                    Spacer(modifier = Modifier.height(60.dp))
+
+                    Card(
+                        modifier = Modifier.height(200.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(20.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(8.dp, 40.dp)
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Column {
+                                Text(
+                                    text = "xx",
+                                    fontSize = 24.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.Black
+                                )
+
+
+                            }
+                        }
+                    }
+
                 }
             }
         }
@@ -175,7 +198,7 @@ fun HeaderMhsSection(onMenuClick: () -> Unit) {
 @Composable
 fun StatMhsCard(indicatorColor: Color, count: String, label: String) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.height(150.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -188,17 +211,18 @@ fun StatMhsCard(indicatorColor: Color, count: String, label: String) {
         ) {
             Box(
                 modifier = Modifier
-                    .size(8.dp, 40.dp)
+                    .size(8.dp, 130.dp)
                     .background(indicatorColor, RoundedCornerShape(4.dp))
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column {
                 Text(
                     text = count,
-                    fontSize = 24.sp,
+                    fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )
+                Spacer(modifier = Modifier.height(30.dp))
                 Text(
                     text = label,
                     fontSize = 14.sp,
@@ -206,26 +230,6 @@ fun StatMhsCard(indicatorColor: Color, count: String, label: String) {
                 )
             }
         }
-    }
-}
-
-@Composable
-fun ProjectsAndGroupsSectionMhs() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        ProjectGroupCard(
-            title = "XX",
-            subtitle = "Proyek Aktif",
-            modifier = Modifier.weight(1f)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        ProjectGroupCard(
-            title = "XX",
-            subtitle = "Grup Mahasiswa",
-            modifier = Modifier.weight(1f)
-        )
     }
 }
 
