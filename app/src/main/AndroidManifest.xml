@@ -20,6 +20,11 @@
             android:label="@string/title_activity_dashboard_dosen_screen"
             android:theme="@style/Theme.Monpad" />
         <activity
+            android:name=".DashboardMahasiswa"
+            android:exported="false"
+            android:label="DashboardMahasiswaScreen"
+            android:theme="@style/Theme.Monpad" />
+        <activity
             android:name=".jpcompose.Login"
             android:exported="false"
             android:label="@string/title_activity_login"
