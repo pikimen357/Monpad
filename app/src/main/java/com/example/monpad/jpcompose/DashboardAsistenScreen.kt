@@ -23,31 +23,33 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.monpad.NilaiActivity
+import com.example.monpad.ProjectActivity
 import com.example.monpad.jpcompose.ui.theme.*
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
 // Data class untuk menu item
-data class ScreenMhs(
+data class ScreenAst(
     val title: String,
     val icon: ImageVector,
     val route: KClass<out ComponentActivity>
 )
 
 // Data class untuk menu section
-data class MenuSectionMhs(
+data class MenuSectionAst(
     val title: String,
-    val items: List<ScreenMhs>,
+    val items: List<ScreenAst>,
     val isCollapsible: Boolean = false,
     val initialExpanded: Boolean = false
 )
 
-class DashboardMahasiswa : ComponentActivity() {
+class DashboardAsisten : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MonpadTheme {
-                DashboardMahasiswaContent()
+                DashboardAssitenContent()
             }
         }
     }
@@ -55,10 +57,10 @@ class DashboardMahasiswa : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardMahasiswaContent() {
+fun DashboardAssitenContent() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    val currentActivity = DashboardMahasiswa::class
+    val currentActivity = DashboardAsisten::class
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -147,13 +149,13 @@ fun HeaderMhsSection(onMenuClick: () -> Unit) {
                 Spacer(modifier = Modifier.width(8.dp))
                 Column {
                     Text(
-                        text = "Dashboard Mahasiswa",
+                        text = "Dashboard Asisten",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                     )
                     Text(
-                        text = "Beranda > Dashboard Mahasiswa",
+                        text = "Beranda > Dashboard Asisten",
                         fontSize = 12.sp,
                         color = Color.Gray
                     )
@@ -294,15 +296,25 @@ fun AppMhsDrawer(
 
     // Menu structure - PERBAIKAN NAVIGASI
     val menuStructure = listOf(
-        MenuSectionMhs(
-            title = "Master Data",
+        MenuSectionAst(
+            title = "Menu",
             isCollapsible = true,
             initialExpanded = false,
             items = listOf(
-                ScreenMhs("Dashboard", Icons.Default.Home, DashboardMahasiswa::class),
-                ScreenMhs("Data Dosen", Icons.Default.Person, DataDosenActivity::class),
-                ScreenMhs("Data Mahasiswa", Icons.Default.People, DataMahasiswaActivity::class),
-                ScreenMhs("Data Asisten", Icons.Default.AccountCircle, DataAsistenActivity::class)
+                ScreenAst("Beranda", Icons.Default.Home, DashboardAsisten::class),
+                ScreenAst("Proyek & Kelompok", Icons.Default.FolderShared, ProjectActivity::class),
+                ScreenAst("Nilai Mahasiswa", Icons.Default.People, NilaiActivity::class)
+            )
+        )
+    )
+
+    val logoutStructure = listOf(
+        MenuSectionAst(
+            title = "Akun",
+            isCollapsible = true,
+            initialExpanded = false,
+            items = listOf(
+                ScreenAst("Logout", Icons.Default.DoorBack, DashboardAsisten::class)
             )
         )
     )
@@ -410,6 +422,53 @@ fun AppMhsDrawer(
                     }
                 }
             }
+
+            logoutStructure.forEach { section ->
+                Spacer(modifier = Modifier.height(16.dp))
+
+                if (section.isCollapsible) {
+                    var expanded by remember { mutableStateOf(section.initialExpanded) }
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .clickable { expanded = !expanded },
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Default.GridView, contentDescription = section.title, tint = Color.White)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(section.title, fontWeight = FontWeight.SemiBold, color = Color.White)
+                        }
+                        Icon(
+                            if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                            contentDescription = if (expanded) "Collapse" else "Expand",
+                            tint = Color.White
+                        )
+                    }
+
+                    if (expanded) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        section.items.forEach { item ->
+                            DrawerMhsItem(
+                                item = item,
+                                isSelected = item.route.java == currentActivity.java,
+                                onClick = {
+                                    closeDrawer()
+                                    try {
+                                        context.startActivity(Intent(context, item.route.java))
+                                    } catch (e: Exception) {
+                                        // Handle error jika Activity tidak ditemukan
+                                        println("Error navigating to ${item.title}: ${e.message}")
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
+            }
         }
 
         // Footer
@@ -438,7 +497,7 @@ fun AppMhsDrawer(
 }
 
 @Composable
-fun DrawerMhsItem(item: ScreenMhs, isSelected: Boolean, onClick: () -> Unit) {
+fun DrawerMhsItem(item: ScreenAst, isSelected: Boolean, onClick: () -> Unit) {
     val backgroundColor = if (isSelected) Color.White else SidebarBackground
     val contentColor = if (isSelected) SidebarBackground else Color.White
 
@@ -522,6 +581,6 @@ class DataAsistenActivity : ComponentActivity() {
 @Composable
 fun DashboardMhsPreview() {
     MonpadTheme {
-        DashboardMahasiswaContent()
+        DashboardAssitenContent()
     }
 }
