@@ -33,8 +33,11 @@ import com.example.monpad.ProjectActivity
 import com.example.monpad.jpcompose.ui.theme.*
 import kotlinx.coroutines.launch
 import android.widget.Toast
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import com.example.monpad.MainActivity
 import kotlin.reflect.KClass
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -118,15 +121,17 @@ fun DashboardMahasiswaContent() {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .padding(top = 50.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .padding(top = 25.dp, start = 4.dp, end = 4.dp)
                     ) {
                         NilaiCardSection()
 
                         Spacer(modifier = Modifier.height(50.dp))
 
                         Card(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 20.dp),
                             shape = RoundedCornerShape(10.dp),
                             colors = CardDefaults.cardColors(containerColor = Color.White),
                             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -222,49 +227,65 @@ fun NilaiCardSection() {
     val nilaiUTS = "88"
     val nilaiPersonal = "79"
 
-    Column(
+    Box(
         modifier = Modifier
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-
+            .fillMaxWidth()
+            .background(PurpleBackgroundNilai)
     ) {
-        // Bagian Nilai Akhir
-        Text(
-            text = nilaiAkhir,
-            fontSize = 72.sp, // Ukuran huruf besar untuk nilai utama
-            fontWeight = FontWeight.Black,
-            color = Color.Black
-        )
-        Text(
-            text = "Nilai Akhir",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = Color.Black
-        )
 
-        Spacer(modifier = Modifier.height(40.dp))
-
-        // Grid 2x2 untuk Nilai Detail
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+
             ) {
-                NilaiDetailCard(title = "Nilai Proyek", value = nilaiProyek, modifier = Modifier.weight(1f))
-                Spacer(modifier = Modifier.width(16.dp))
-                NilaiDetailCard(title = "UAS", value = nilaiUAS, modifier = Modifier.weight(1f))
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(
+            // Bagian Nilai Akhir
+            Text(
+                text = nilaiAkhir,
+                fontSize = 72.sp, // Ukuran huruf besar untuk nilai utama
+                fontWeight = FontWeight.Black,
+                color = PurpleNilai
+            )
+            Text(
+                text = "Nilai Akhir",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = PurpleNilai
+            )
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            // Grid 2x2 untuk Nilai Detail
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                NilaiDetailCard(title = "UTS", value = nilaiUTS, modifier = Modifier.weight(1f))
-                Spacer(modifier = Modifier.width(16.dp))
-                NilaiDetailCard(title = "Nilai Personal", value = nilaiPersonal, modifier = Modifier.weight(1f))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    NilaiDetailCard(
+                        title = "Nilai Proyek",
+                        value = nilaiProyek,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    NilaiDetailCard(title = "UAS", value = nilaiUAS, modifier = Modifier.weight(1f))
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    NilaiDetailCard(title = "UTS", value = nilaiUTS, modifier = Modifier.weight(1f))
+                    Spacer(modifier = Modifier.width(16.dp))
+                    NilaiDetailCard(
+                        title = "Nilai Personal",
+                        value = nilaiPersonal,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
             }
         }
     }
@@ -274,10 +295,11 @@ fun NilaiCardSection() {
 fun NilaiDetailCard(title: String, value: String, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
-            .height(100.dp),
+            .fillMaxHeight()
+            .width(130.dp),
         shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        colors = CardDefaults.cardColors(containerColor = PurpleCardNilaiSmall),
+//        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(
             modifier = Modifier
@@ -290,7 +312,7 @@ fun NilaiDetailCard(title: String, value: String, modifier: Modifier = Modifier)
                 text = title,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Color.Gray
+                color = PurpleNilai
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
@@ -427,9 +449,9 @@ fun AppMahasiswaDrawer(
 
     // Menu structure - PERBAIKAN NAVIGASI
     val menuItems = listOf(
-        ScreenMhs("Beranda", Icons.Default.Home, DashboardMahasiswaScreen::class),
-        ScreenMhs("Progress Proyek", Icons.Default.FolderShared, DashboardMahasiswaScreen::class),
-        ScreenMhs("Nilai Akhir", Icons.Default.Star,  DashboardMahasiswaScreen::class)
+        ScreenMhs("Beranda", Icons.Default.Home, MainActivity::class), // Navigasi ke MainActivity
+        ScreenMhs("Progress Proyek", Icons.Default.FolderShared, ProjectActivity::class), // Navigasi ke Progres Proyek
+        ScreenMhs("Nilai Akhir", Icons.Default.Star,  ProjectActivity::class), // Navigasi ke Nilai Akhir
     )
 
     val logoutStructure = listOf(

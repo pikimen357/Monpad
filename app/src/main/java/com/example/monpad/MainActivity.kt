@@ -13,62 +13,25 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Hide action bar for splash screen effect
+        supportActionBar?.hide()
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        with(binding){
-            btnMahasiswa.setOnClickListener {
-                startActivity(Intent(this@MainActivity,
-                    Mahasiswa::class.java))
-            }
-
-            btnAsisten.setOnClickListener {
-                startActivity(Intent(this@MainActivity,
-                    Asisten::class.java))
-            }
-
-            btnDosen.setOnClickListener {
-                startActivity(Intent(this@MainActivity,
-                    Dosen::class.java))
-            }
-
-            btnProject.setOnClickListener {
-                startActivity(Intent(this@MainActivity,
-                    ProjectActivity::class.java))
-            }
-
-            btnNilai.setOnClickListener {
-                startActivity(Intent(this@MainActivity,
-                    NilaiActivity::class.java))
-            }
-
-            // Di MainActivity
-            btnDashboardDosen.setOnClickListener {
-                startActivity(Intent(this@MainActivity,
-                    com.example.monpad.jpcompose.DashboardDosen::class.java))
-            }
-
+        with(binding) {
             btnLogin.setOnClickListener {
-                Log.d("MainActivity", "Button clicked")
+                Log.d("MainActivity", "Login button clicked")
                 try {
-                    startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                    Log.d("MainActivity", "Intent started")
+                    val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                    // Optional: Add transition animation
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                    Log.d("MainActivity", "Intent to LoginActivity started successfully")
                 } catch (e: Exception) {
-                    Log.e("MainActivity", "Error: ${e.message}")
+                    Log.e("MainActivity", "Error starting LoginActivity: ${e.message}", e)
                 }
             }
-
-            btnDashboardAst.setOnClickListener {
-                startActivity(Intent(this@MainActivity,
-                    DashboardAsisten::class.java))
-            }
-
-            btnDashboardMhs.setOnClickListener {
-                startActivity(Intent(this@MainActivity,
-                    DashboardMahasiswa::class.java))
-            }
-
         }
-
     }
 }

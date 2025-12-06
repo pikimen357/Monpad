@@ -4,71 +4,65 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
     android:gravity="center"
     android:orientation="vertical"
+    android:padding="24dp"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/btn_mahasiswa"
-        android:layout_width="170dp"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Data Mahasiswa"/>
+        android:layout_margin="16dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="8dp">
 
-    <Button
-        android:id="@+id/btn_Asisten"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Data Asisten"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="32dp"
+            android:gravity="center">
 
-    <Button
-        android:id="@+id/btn_dosen"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Data Dosen"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Welcome To"
+                android:textSize="28sp"
+                android:textColor="#4A3368"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"/>
 
-    <Button
-        android:id="@+id/btn_project"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Data Projek"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MonPAD"
+                android:textSize="32sp"
+                android:textColor="#4A3368"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"/>
 
-    <Button
-        android:id="@+id/btn_Nilai"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Data nilai"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Monitoring Proyek Aplikasi Dasar"
+                android:textSize="14sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="32dp"/>
 
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Login"/>
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="200dp"
+                android:layout_height="56dp"
+                android:text="Log In"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:background="@drawable/button_background"
+                android:elevation="4dp"/>
 
-    <Button
-        android:id="@+id/btn_DashboardAst"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Dashboard Asisten"/>
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_DashboardMhs"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Dashboard Mahasiswa"/>
-
-    <Button
-        android:id="@+id/btn_DashboardDosen"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Dashboard Dosen"/>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

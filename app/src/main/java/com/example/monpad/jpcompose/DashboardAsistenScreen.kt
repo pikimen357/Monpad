@@ -31,6 +31,7 @@ import com.example.monpad.jpcompose.ui.theme.*
 import kotlinx.coroutines.launch
 import android.widget.Toast
 import androidx.compose.ui.text.font.FontWeight
+import com.example.monpad.Mahasiswa
 import kotlin.reflect.KClass
 import com.example.monpad.jpcompose.ui.theme.Purple40
 
@@ -370,7 +371,7 @@ fun AppMhsDrawer(
     val menuItems = listOf(
         ScreenAst("Beranda", Icons.Default.Home, DashboardAsisten::class),
         ScreenAst("Proyek & Kelompok", Icons.Default.FolderShared, ProjectActivity::class),
-        ScreenAst("Nilai Mahasiswa", Icons.Default.People, NilaiActivity::class)
+        ScreenAst("Data Mahasiswa", Icons.Default.People, Mahasiswa::class)
     )
 
     val logoutStructure = listOf(

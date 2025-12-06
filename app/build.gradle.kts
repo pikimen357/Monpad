@@ -52,6 +52,7 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.foundation.layout)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

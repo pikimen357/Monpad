@@ -71,11 +71,11 @@ class LoginActivity : ComponentActivity() {
                 "mahasiswa" -> {
                     // Arahkan ke Dashboard Mahasiswa
 
-                    Intent(this@LoginActivity, MainActivity::class.java)
+                    Intent(this@LoginActivity, DashboardMahasiswa::class.java)
                 }
-                "admin" -> {
+                "asisten" -> {
                     // Arahkan ke Dashboard Admin
-                    Intent(this@LoginActivity, MainActivity::class.java)
+                    Intent(this@LoginActivity, DashboardAsisten::class.java)
                 }
                 else -> {
                     // Default ke MainActivity
