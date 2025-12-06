@@ -77,3 +77,60 @@ fun BottomNavigationBar() {
         )
     }
 }
+
+@Composable
+fun BottomNavigationBarAst() {
+    val context = LocalContext.current
+    NavigationBar(
+        containerColor = Color.White,
+        tonalElevation = 8.dp,
+        modifier = Modifier
+            .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
+    ) {
+        NavigationBarItem(
+            selected = false,
+            onClick = {
+                context.startActivity(Intent(context, DashboardDosen::class.java))
+            },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Home,
+                    contentDescription = "Dashboard",
+                    tint = Color.Gray
+                )
+            }
+        )
+
+        NavigationBarItem(
+            selected = true,
+            onClick = {
+                context.startActivity(Intent(context, ProjectActivity::class.java))
+            },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = "Menu",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .background(Color(0xFF6B4BA6), RoundedCornerShape(50))
+                        .padding(10.dp)
+                        .size(19.dp)
+                )
+            }
+        )
+
+        NavigationBarItem(
+            selected = false,
+            onClick = {
+                context.startActivity(Intent(context, LoginActivity::class.java))
+            },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.DoorBack,
+                    contentDescription = "Login",
+                    tint = Color.Gray
+                )
+            }
+        )
+    }
+}

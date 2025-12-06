@@ -4,6 +4,8 @@ import android.content.Intent // Import untuk navigasi Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -29,6 +31,7 @@ import com.example.monpad.* // Import semua Activity (Dosen, Mahasiswa, ProjectA
 import kotlin.reflect.KClass // Digunakan untuk currentActivity
 
 import androidx.compose.runtime.rememberCoroutineScope
+import com.example.monpad.jpcompose.ui.theme.Purple40
 import kotlinx.coroutines.launch
 
 // Define custom colors based on the image's theme
@@ -82,6 +85,7 @@ fun DashboardDosenContent() {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
+                    .verticalScroll(rememberScrollState())
                     .background(PurpleBackground)
             ) {
                 // 1. Header Section (Sekarang menerima fungsi onMenuClick)
@@ -96,13 +100,13 @@ fun DashboardDosenContent() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
-                        .padding(top = 16.dp)
+                        .padding(top = 16.dp, bottom = 30.dp)
                 ) {
-                    StatCard(indicatorColor = CardPurple, count = "XXX", label = "Mahasiswa Terdaftar")
+                    StatCard(indicatorColor = CardPurple, count = "50", label = "Mahasiswa Terdaftar")
                     Spacer(modifier = Modifier.height(16.dp))
-                    StatCard(indicatorColor = CardBlue, count = "X", label = "Asisten Praktikum")
+                    StatCard(indicatorColor = CardBlue, count = "5", label = "Asisten Praktikum")
                     Spacer(modifier = Modifier.height(16.dp))
-                    StatCard(indicatorColor = CardPurple, count = "XX", label = "Proyek Aktif")
+                    StatCard(indicatorColor = CardPurple, count = "20", label = "Proyek Aktif")
                     Spacer(modifier = Modifier.height(32.dp))
                     ProjectsAndGroupsSection()
                 }
@@ -168,11 +172,95 @@ fun HeaderSection(onMenuClick: () -> Unit) {
 
 @Composable
 fun StatCard(indicatorColor: Color, count: String, label: String) {
-    // Implementation can be added here or kept as is if defined elsewhere
+    Card(
+        modifier = Modifier.height(150.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(8.dp, 130.dp)
+                    .background(indicatorColor, RoundedCornerShape(4.dp))
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Column {
+                Text(
+                    text = count,
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+                Spacer(modifier = Modifier.height(30.dp))
+                Text(
+                    text = label,
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
+            }
+        }
+    }
 }
 @Composable
 fun ProjectsAndGroupsSection() {
-    // Implementation can be added here or kept as is if defined elsewhere
+    val context = LocalContext.current
+    Card(
+        modifier = Modifier.height(200.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(8.dp, 40.dp)
+            )
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Proyek & Kelompok",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Purple40,
+                    modifier = Modifier.padding(bottom = 15.dp)
+                )
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                Button(
+                    onClick = {
+                        context.startActivity(Intent(context, ProjectActivity::class.java))
+                    },
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Purple40)
+                ) {
+                    Text(
+                        text = "Lihat Detail",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+
+            }
+
+
+        }
+    }
 }
 @Composable
 fun DashboardBottomNavBar() {
