@@ -8,6 +8,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -24,32 +26,36 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.style.TextAlign
 import com.example.monpad.LoginActivity
 import com.example.monpad.NilaiActivity
 import com.example.monpad.ProjectActivity
 import com.example.monpad.jpcompose.ui.theme.*
 import kotlinx.coroutines.launch
 import android.widget.Toast
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import kotlin.reflect.KClass
+import java.text.SimpleDateFormat
+import java.util.Locale
 import com.example.monpad.jpcompose.ui.theme.Purple40
 
-// Data class untuk menu item
-data class ScreenAst(
+// Data class untuk menu item Mahasiswa
+data class ScreenMhs(
     val title: String,
     val icon: ImageVector,
     val route: KClass<out ComponentActivity>
 )
 
 // Data class untuk menu section
-data class MenuSectionAst(
+data class MenuSectionMhs(
     val title: String,
-    val items: List<ScreenAst>,
+    val items: List<ScreenMhs>,
     val isCollapsible: Boolean = false,
     val initialExpanded: Boolean = false
 )
 
-class DashboardAsisten : ComponentActivity() {
+class DashboardMahasiswaScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -62,17 +68,17 @@ class DashboardAsisten : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardAssitenContent() {
+fun DashboardMahasiswaContent() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    val currentActivity = DashboardAsisten::class
+    val currentActivity = DashboardMahasiswaScreen::class
     val context = LocalContext.current
 
 
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            AppMhsDrawer(
+            AppMahasiswaDrawer(
                 closeDrawer = { scope.launch { drawerState.close() } },
                 currentActivity = currentActivity
             )
@@ -81,7 +87,7 @@ fun DashboardAssitenContent() {
     ) {
         Scaffold(
             bottomBar = {
-                BottomNavigationBarAst(
+                BottomNavigationBarMhs(
                     // Panggil fungsi untuk membuka drawer saat tombol menu di bottom bar diklik
                     onMenuClick = { scope.launch { drawerState.open() } }
                 )
@@ -90,89 +96,117 @@ fun DashboardAssitenContent() {
                 .fillMaxSize()
                 .background(PurpleBackground)
         ) { innerPadding ->
+            // Wrap the entire content in a Column to place the header above the scrollable area
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(innerPadding)
-                    .background(PurpleBackground)
+                    .padding(innerPadding) // Apply padding from Scaffold
+                    .background(PurpleBackground) // Set the overall background color
             ) {
-                HeaderMhsSection(
+                // Header is now outside the scrollable Column
+                HeaderMahasiswaSection(
                     onMenuClick = { scope.launch { drawerState.open() } }
                 )
 
+                // This new Column will contain all the scrollable content
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 50.dp)
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()) // Only this Column scrolls
+                        .padding(bottom = 50.dp) // Keep padding for content visibility
                 ) {
-                    StatMhsCard(
-                        indicatorColor = CardPurple,
-                        count = "50",
-                        label = "Mahasiswa Terdaftar"
-                    )
-                    Spacer(modifier = Modifier.height(30.dp))
-
-                    StatMhsCard(
-                        indicatorColor = CardPurple,
-                        count = "20",
-                        label = "Proyek Aktif"
-                    )
-
-                    Spacer(modifier = Modifier.height(50.dp))
-
-                    Card(
-                        modifier = Modifier.height(200.dp),
-                        shape = RoundedCornerShape(10.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .padding(top = 50.dp)
                     ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(20.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                        NilaiCardSection()
+
+                        Spacer(modifier = Modifier.height(50.dp))
+
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(10.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color.White),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                         ) {
-                            Box(
+                            Row(
                                 modifier = Modifier
-                                    .size(8.dp, 40.dp)
+                                    .fillMaxWidth()
+                                    .padding(20.dp),
+                                verticalAlignment = Alignment.CenterVertically
                             )
-                            Column(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                Text(
-                                    text = "Proyek & Kelompok",
-                                    fontSize = 24.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Purple40,
-                                    modifier = Modifier.padding(bottom = 15.dp)
+                            {
+                                Box(
+                                    modifier = Modifier
+                                        .size(8.dp, 40.dp)
                                 )
-
-                                Spacer(modifier = Modifier.height(30.dp))
-
-                                Button(
-                                    onClick = {
-                                        context.startActivity(Intent(context, ProjectActivity::class.java))
-                                    },
-                                    shape = RoundedCornerShape(8.dp),
-                                    colors = ButtonDefaults.buttonColors(containerColor = Purple40)
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(bottom = 30.dp)
                                 ) {
                                     Text(
-                                        text = "Lihat Detail",
-                                        color = Color.White,
+                                        text = "Monitoring PAD",
+                                        fontSize = 24.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Purple40,
+                                        modifier = Modifier.padding(bottom = 15.dp)
+                                    )
+
+                                    Spacer(modifier = Modifier.height(10.dp))
+
+                                    Text(
+                                        text = "Catatan pengajar: ",
+                                        fontSize = 16.sp,
+                                        color = Color.Black,
                                         fontWeight = FontWeight.Bold
                                     )
+
+                                    Text(
+                                        text = "Proyek ini perlu perbaikan pada bagian dashboard assiten dan dosen yang mana datanya tidak benar benar dinamis",
+                                        fontSize = 15.sp,
+                                        textAlign = TextAlign.Justify,
+                                        color = Color.Black,
+                                        fontWeight = FontWeight.Normal
+                                    )
+
+                                    Spacer(modifier = Modifier.height(18.dp))
+
+                                    Column(modifier = Modifier.padding(start = 15.dp)) {
+                                        Text(
+                                            text = "Project Owner : Govan",
+                                            fontSize = 11.sp,
+                                            color = Color.Black,
+                                            fontWeight = FontWeight.Bold
+                                        )
+
+                                        Spacer(modifier = Modifier.height(2.dp))
+
+                                        Text(
+                                            text = "Asisten : Govan",
+                                            fontSize = 11.sp,
+                                            color = Color.Black,
+                                            fontWeight = FontWeight.Bold
+                                        )
+
+                                        Spacer(modifier = Modifier.height(2.dp))
+
+                                        Text(
+                                            text = "Jumlah Anggota : 4",
+                                            fontSize = 11.sp,
+                                            color = Color.Black,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+
+
                                 }
-
-
                             }
-
-
                         }
-                    }
 
+                    }
                 }
             }
         }
@@ -180,7 +214,97 @@ fun DashboardAssitenContent() {
 }
 
 @Composable
-fun HeaderMhsSection(onMenuClick: () -> Unit) {
+fun NilaiCardSection() {
+    // Data dummy untuk tampilan nilai
+    val nilaiAkhir = "90"
+    val nilaiProyek = "80"
+    val nilaiUAS = "90"
+    val nilaiUTS = "88"
+    val nilaiPersonal = "79"
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+
+    ) {
+        // Bagian Nilai Akhir
+        Text(
+            text = nilaiAkhir,
+            fontSize = 72.sp, // Ukuran huruf besar untuk nilai utama
+            fontWeight = FontWeight.Black,
+            color = Color.Black
+        )
+        Text(
+            text = "Nilai Akhir",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = Color.Black
+        )
+
+        Spacer(modifier = Modifier.height(40.dp))
+
+        // Grid 2x2 untuk Nilai Detail
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                NilaiDetailCard(title = "Nilai Proyek", value = nilaiProyek, modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.width(16.dp))
+                NilaiDetailCard(title = "UAS", value = nilaiUAS, modifier = Modifier.weight(1f))
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                NilaiDetailCard(title = "UTS", value = nilaiUTS, modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.width(16.dp))
+                NilaiDetailCard(title = "Nilai Personal", value = nilaiPersonal, modifier = Modifier.weight(1f))
+            }
+        }
+    }
+}
+
+@Composable
+fun NilaiDetailCard(title: String, value: String, modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier
+            .height(100.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = title,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.Gray
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = value,
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = Purple40 // Gunakan warna ungu untuk kontras
+            )
+        }
+    }
+}
+
+@Composable
+fun HeaderMahasiswaSection(onMenuClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -206,13 +330,13 @@ fun HeaderMhsSection(onMenuClick: () -> Unit) {
                 Spacer(modifier = Modifier.width(8.dp))
                 Column {
                     Text(
-                        text = "Dashboard Asisten",
+                        text = "Dashboard Mahasiswa",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                     )
                     Text(
-                        text = "Beranda > Dashboard Asisten",
+                        text = "Beranda > Dashboard Mahasiswa",
                         fontSize = 12.sp,
                         color = Color.Gray
                     )
@@ -229,75 +353,10 @@ fun HeaderMhsSection(onMenuClick: () -> Unit) {
     }
 }
 
-@Composable
-fun StatMhsCard(indicatorColor: Color, count: String, label: String) {
-    Card(
-        modifier = Modifier.height(150.dp),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(8.dp, 130.dp)
-                    .background(indicatorColor, RoundedCornerShape(4.dp))
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Column {
-                Text(
-                    text = count,
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-                Spacer(modifier = Modifier.height(30.dp))
-                Text(
-                    text = label,
-                    fontSize = 14.sp,
-                    color = Color.Gray
-                )
-            }
-        }
-    }
-}
+
 
 @Composable
-fun ProjectGroupCard(title: String, subtitle: String, modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier,
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = title,
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
-            Text(
-                text = subtitle,
-                fontSize = 12.sp,
-                color = Color.Gray
-            )
-        }
-    }
-}
-
-@Composable
-fun BottomNavigationBarAst(onMenuClick: () -> Unit) {
+fun BottomNavigationBarMhs(onMenuClick: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope() // Diperlukan untuk onClick
 
@@ -319,7 +378,7 @@ fun BottomNavigationBarAst(onMenuClick: () -> Unit) {
                 indicatorColor = PurpleBackground.copy(alpha = 0.1f) // Warna indikator di belakang ikon
             ),
             onClick = {
-                Toast.makeText(context, "Dashboard Asisten", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Dashboard Mahasiswa", Toast.LENGTH_SHORT).show()
             }
         )
         NavigationBarItem(
@@ -360,7 +419,7 @@ fun BottomNavigationBarAst(onMenuClick: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppMhsDrawer(
+fun AppMahasiswaDrawer(
     closeDrawer: () -> Unit,
     currentActivity: KClass<*>
 ) {
@@ -368,18 +427,18 @@ fun AppMhsDrawer(
 
     // Menu structure - PERBAIKAN NAVIGASI
     val menuItems = listOf(
-        ScreenAst("Beranda", Icons.Default.Home, DashboardAsisten::class),
-        ScreenAst("Proyek & Kelompok", Icons.Default.FolderShared, ProjectActivity::class),
-        ScreenAst("Nilai Mahasiswa", Icons.Default.People, NilaiActivity::class)
+        ScreenMhs("Beranda", Icons.Default.Home, DashboardMahasiswaScreen::class),
+        ScreenMhs("Progress Proyek", Icons.Default.FolderShared, DashboardMahasiswaScreen::class),
+        ScreenMhs("Nilai Akhir", Icons.Default.Star,  DashboardMahasiswaScreen::class)
     )
 
     val logoutStructure = listOf(
-        MenuSectionAst(
+        MenuSectionMhs(
             title = "Akun",
             isCollapsible = false, // Langsung tampilkan item
             initialExpanded = true, // Tidak relevan jika isCollapsible false
             items = listOf(
-                ScreenAst("Logout", Icons.Default.DoorBack, LoginActivity::class) // Navigasi ke LoginActivity
+                ScreenMhs("Logout", Icons.Default.DoorBack, LoginActivity::class) // Navigasi ke LoginActivity
             )
         )
     )
@@ -443,7 +502,7 @@ fun AppMhsDrawer(
         Column(modifier = Modifier.weight(1f)) {
             Spacer(modifier = Modifier.height(16.dp))
             menuItems.forEach { item ->
-                DrawerMhsItem(
+                DrawerMahasiswaItem(
                     item = item,
                     isSelected = item.route.java == currentActivity.java,
                     onClick = {
@@ -482,7 +541,7 @@ fun AppMhsDrawer(
                     if (expanded) {
                         Spacer(modifier = Modifier.height(8.dp))
                         section.items.forEach { item ->
-                            DrawerMhsItem(
+                            DrawerMahasiswaItem(
                                 item = item, isSelected = false, // Logout tidak pernah 'selected'
                                 onClick = {
                                     closeDrawer()
@@ -506,7 +565,7 @@ fun AppMhsDrawer(
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     section.items.forEach { item ->
-                        DrawerMhsItem(
+                        DrawerMahasiswaItem(
                             item = item, isSelected = false,
                             onClick = {
                                 closeDrawer()
@@ -535,7 +594,7 @@ fun AppMhsDrawer(
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Column {
-                    Text("Asisten", fontWeight = FontWeight.SemiBold, color = Color.White)
+                    Text("Mahasiswa", fontWeight = FontWeight.SemiBold, color = Color.White)
                     Text("TRPL", fontSize = 14.sp, color = Color.LightGray)
                 }
             }
@@ -544,7 +603,7 @@ fun AppMhsDrawer(
 }
 
 @Composable
-fun DrawerMhsItem(item: ScreenAst, isSelected: Boolean, onClick: () -> Unit) {
+fun DrawerMahasiswaItem(item: ScreenMhs, isSelected: Boolean, onClick: () -> Unit) {
     val backgroundColor = if (isSelected) Color.White else SidebarBackground
     val contentColor = if (isSelected) SidebarBackground else Color.White
 
@@ -574,12 +633,60 @@ fun DrawerMhsItem(item: ScreenAst, isSelected: Boolean, onClick: () -> Unit) {
     }
 }
 
+// Dummy Activities untuk navigasi (Buat file terpisah untuk masing-masing)
+class DataDosenActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MonpadTheme {
+                // Isi dengan konten DataDosenScreen
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Text("Data Dosen Screen", modifier = Modifier.padding(16.dp))
+                }
+            }
+        }
+    }
+}
 
+class DataMahasiswaActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MonpadTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Text("Data Mahasiswa Screen", modifier = Modifier.padding(16.dp))
+                }
+            }
+        }
+    }
+}
+
+class DataAsistenActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MonpadTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Text("Data Asisten Screen", modifier = Modifier.padding(16.dp))
+                }
+            }
+        }
+    }
+}
 
 @Preview(showBackground = true)
 @Composable
-fun DashboarAstPreview() {
+fun DashboardMhsPreview() {
     MonpadTheme {
-        DashboardAssitenContent()
+        DashboardMahasiswaContent()
     }
 }

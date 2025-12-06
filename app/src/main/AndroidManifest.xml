@@ -22,6 +22,11 @@
         <activity
             android:name=".DashboardAsisten"
             android:exported="false"
+            android:label="DashboardAsistenScreen"
+            android:theme="@style/Theme.Monpad" />
+        <activity
+            android:name=".DashboardMahasiswa"
+            android:exported="false"
             android:label="DashboardMahasiswaScreen"
             android:theme="@style/Theme.Monpad" />
         <activity
