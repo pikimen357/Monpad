@@ -37,11 +37,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.monpad.MainActivity
 import kotlin.reflect.KClass
 import java.text.SimpleDateFormat
 import java.util.Locale
 import com.example.monpad.jpcompose.ui.theme.Purple40
+import com.example.monpad.network.DashboardGroup
+import com.example.monpad.network.DashboardProject
+import com.example.monpad.viewmodel.DashboardMahasiswaViewModel
+import com.example.monpad.viewmodel.UiState
 
 // Data class untuk menu item Mahasiswa
 data class ScreenMhs(
@@ -128,91 +133,106 @@ fun DashboardMahasiswaContent() {
 
                         Spacer(modifier = Modifier.height(50.dp))
 
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 20.dp),
-                            shape = RoundedCornerShape(10.dp),
-                            colors = CardDefaults.cardColors(containerColor = Color.White),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(20.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            )
-                            {
-                                Box(
-                                    modifier = Modifier
-                                        .size(8.dp, 40.dp)
-                                )
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(bottom = 30.dp)
-                                ) {
-                                    Text(
-                                        text = "Monitoring PAD",
-                                        fontSize = 24.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = Purple40,
-                                        modifier = Modifier.padding(bottom = 15.dp)
-                                    )
-
-                                    Spacer(modifier = Modifier.height(10.dp))
-
-                                    Text(
-                                        text = "Catatan pengajar: ",
-                                        fontSize = 16.sp,
-                                        color = Color.Black,
-                                        fontWeight = FontWeight.Bold
-                                    )
-
-                                    Text(
-                                        text = "Proyek ini perlu perbaikan pada bagian dashboard assiten dan dosen yang mana datanya tidak benar benar dinamis",
-                                        fontSize = 15.sp,
-                                        textAlign = TextAlign.Justify,
-                                        color = Color.Black,
-                                        fontWeight = FontWeight.Normal
-                                    )
-
-                                    Spacer(modifier = Modifier.height(18.dp))
-
-                                    Column(modifier = Modifier.padding(start = 15.dp)) {
-                                        Text(
-                                            text = "Project Owner : Govan",
-                                            fontSize = 11.sp,
-                                            color = Color.Black,
-                                            fontWeight = FontWeight.Bold
-                                        )
-
-                                        Spacer(modifier = Modifier.height(2.dp))
-
-                                        Text(
-                                            text = "Asisten : Govan",
-                                            fontSize = 11.sp,
-                                            color = Color.Black,
-                                            fontWeight = FontWeight.Bold
-                                        )
-
-                                        Spacer(modifier = Modifier.height(2.dp))
-
-                                        Text(
-                                            text = "Jumlah Anggota : 4",
-                                            fontSize = 11.sp,
-                                            color = Color.Black,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                    }
-
-
-                                }
-                            }
-                        }
+                        ProjectInfoCard()
 
                     }
                 }
+            }
+        }
+    }
+}
+
+
+// Not fiction
+@Composable
+fun ProjectInfoCard(){
+    val dproject = DashboardProject()
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        )
+        {
+            Box(
+                modifier = Modifier
+                    .size(8.dp, 40.dp)
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 30.dp)
+            ) {
+                dproject.namaProjek?.let {
+                    Text(
+                        text = it,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Purple40,
+                        modifier = Modifier.padding(bottom = 15.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Text(
+                    text = "Catatan pengajar: ",
+                    fontSize = 16.sp,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
+                )
+
+                dproject.deskripsi?.let {
+                    Text(
+                        text = it,
+                        fontSize = 15.sp,
+                        textAlign = TextAlign.Justify,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(18.dp))
+
+                Column(modifier = Modifier.padding(start = 15.dp)) {
+                    val po = dproject.owner
+                    Text(
+                        text = "Project Owner : $po",
+                        fontSize = 11.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Spacer(modifier = Modifier.height(2.dp))
+
+                    val asisten = dproject.asisten
+                    Text(
+                        text = "Asisten : $asisten",
+                        fontSize = 11.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Spacer(modifier = Modifier.height(2.dp))
+
+//                    val anggota = dproject
+                    Text(
+                        text = "Jumlah Anggota : 4",
+                        fontSize = 11.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+
             }
         }
     }
