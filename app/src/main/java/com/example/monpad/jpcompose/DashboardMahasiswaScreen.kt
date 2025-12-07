@@ -33,6 +33,7 @@ import com.example.monpad.ProjectActivity
 import com.example.monpad.jpcompose.ui.theme.*
 import kotlinx.coroutines.launch
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontStyle
@@ -47,6 +48,7 @@ import com.example.monpad.network.DashboardGroup
 import com.example.monpad.network.DashboardProject
 import com.example.monpad.viewmodel.DashboardMahasiswaViewModel
 import com.example.monpad.viewmodel.UiState
+import android.util.Log
 
 // Data class untuk menu item Mahasiswa
 data class ScreenMhs(
@@ -64,11 +66,15 @@ data class MenuSectionMhs(
 )
 
 class DashboardMahasiswaScreen : ComponentActivity() {
+
+    private val viewModel: DashboardMahasiswaViewModel by viewModels()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MonpadTheme {
-                DashboardAssitenContent()
+                DashboardMahasiswaContent(viewModel)
             }
         }
     }
@@ -76,12 +82,41 @@ class DashboardMahasiswaScreen : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardMahasiswaContent() {
+fun DashboardMahasiswaContent(viewModel: DashboardMahasiswaViewModel) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val currentActivity = DashboardMahasiswaScreen::class
-    val context = LocalContext.current
 
+    val dashboardState by viewModel.dashboardState.collectAsState()
+    val dproject by viewModel.dproject.collectAsState()
+    val dgroup by viewModel.dgroup.collectAsState()
+    val error by viewModel.error.collectAsState()
+
+    val context = LocalContext.current
+    LaunchedEffect(dashboardState) {
+        when (val state = dashboardState) {
+            is UiState.Loading -> {
+                Toast.makeText(context, "Loading dashboard data...", Toast.LENGTH_SHORT).show()
+            }
+            is UiState.Success -> {
+                Toast.makeText(context, "Data loaded successfully!", Toast.LENGTH_SHORT).show()
+                Log.d("DashboardUI", "Project: ${dproject?.nama_projek}")
+            }
+            is UiState.Error -> {
+                Toast.makeText(context, "Error: ${state.message}", Toast.LENGTH_LONG).show()
+            }
+            else -> {}
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.getDashboardData()
+    }
+
+
+    if (error != null) {
+        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -133,7 +168,7 @@ fun DashboardMahasiswaContent() {
 
                         Spacer(modifier = Modifier.height(50.dp))
 
-                        ProjectInfoCard()
+                        ProjectInfoCard(dproject = dproject, dgroup = dgroup)
 
                     }
                 }
@@ -145,8 +180,7 @@ fun DashboardMahasiswaContent() {
 
 // Not fiction
 @Composable
-fun ProjectInfoCard(){
-    val dproject = DashboardProject()
+fun ProjectInfoCard(dproject: DashboardProject?, dgroup: DashboardGroup?) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -160,79 +194,84 @@ fun ProjectInfoCard(){
                 .fillMaxWidth()
                 .padding(20.dp),
             verticalAlignment = Alignment.CenterVertically
-        )
-        {
-            Box(
-                modifier = Modifier
-                    .size(8.dp, 40.dp)
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 30.dp)
-            ) {
-                dproject.namaProjek?.let {
+        ) {
+            Box(modifier = Modifier.size(8.dp, 40.dp))
+
+            if (dproject == null) {
+                // Tampilkan loading atau placeholder
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 30.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CircularProgressIndicator()
                     Text(
-                        text = it,
+                        text = "Memuat data project...",
+                        color = Color.Gray,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
+            } else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 30.dp)
+                ) {
+                    Text(
+                        text = dproject.nama_projek ?: "Nama Project Tidak Tersedia",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         color = Purple40,
                         modifier = Modifier.padding(bottom = 15.dp)
                     )
-                }
 
-                Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
 
-                Text(
-                    text = "Catatan pengajar: ",
-                    fontSize = 16.sp,
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold
-                )
-
-                dproject.deskripsi?.let {
                     Text(
-                        text = it,
+                        text = "Deskripsi: ",
+                        fontSize = 16.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Text(
+                        text = dproject.deskripsi ?: "Tidak ada deskripsi",
                         fontSize = 15.sp,
                         textAlign = TextAlign.Justify,
                         color = Color.Black,
                         fontWeight = FontWeight.Normal
                     )
+
+                    Spacer(modifier = Modifier.height(18.dp))
+
+                    Column(modifier = Modifier.padding(start = 15.dp)) {
+                        Text(
+                            text = "Tahun Ajaran : ${dproject.tahun_ajaran ?: "N/A"}",
+                            fontSize = 11.sp,
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        Spacer(modifier = Modifier.height(2.dp))
+
+                        Text(
+                            text = "Minggu ke : ${dproject.weekPeriod ?: "N/A"}",
+                            fontSize = 11.sp,
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        Spacer(modifier = Modifier.height(2.dp))
+
+                        Text(
+                            text = "Jumlah Anggota : ${dgroup?.anggota?.size ?: "N/A"}",
+                            fontSize = 11.sp,
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
-
-                Spacer(modifier = Modifier.height(18.dp))
-
-                Column(modifier = Modifier.padding(start = 15.dp)) {
-                    val po = dproject.owner
-                    Text(
-                        text = "Project Owner : $po",
-                        fontSize = 11.sp,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Spacer(modifier = Modifier.height(2.dp))
-
-                    val asisten = dproject.asisten
-                    Text(
-                        text = "Asisten : $asisten",
-                        fontSize = 11.sp,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Spacer(modifier = Modifier.height(2.dp))
-
-//                    val anggota = dproject
-                    Text(
-                        text = "Jumlah Anggota : 4",
-                        fontSize = 11.sp,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-
             }
         }
     }
@@ -725,10 +764,10 @@ class DataAsistenActivity : ComponentActivity() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DashboardMhsPreview() {
-    MonpadTheme {
-        DashboardMahasiswaContent()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun DashboardMhsPreview() {
+//    MonpadTheme {
+//        DashboardMahasiswaContent()
+//    }
+//}

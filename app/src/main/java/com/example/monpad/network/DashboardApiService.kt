@@ -12,7 +12,7 @@ import retrofit2.http.POST
 // =======================================================
 
 // Kelas utama untuk response API Dashboard
-data class DashboardAsisten(
+data class DashboardMahasiswa(
     @SerializedName("data")
     val data: DashboardData? = null
 )
@@ -36,7 +36,7 @@ data class Grades(
     @SerializedName("member_grade")
     val memberGrade: Map<String, Any>? = null,
     @SerializedName("project_grade")
-    val projectGrade: Int? = null,
+    val projectGrade: Double? = null,
     @SerializedName("personal_grade")
     val personalGrade: String? = null,
     @SerializedName("final_grade")
@@ -82,13 +82,13 @@ data class DashboardProject(
     @SerializedName("id")
     val id: Int? = null,
     @SerializedName("nama_projek")
-    val namaProjek: String? = null,
+    val nama_projek: String? = null,
     @SerializedName("semester")
     val semester: Int? = null,
     @SerializedName("deskripsi")
     val deskripsi: String? = null,
     @SerializedName("tahun_ajaran")
-    val tahunAjaran: Int? = null,
+    val tahun_ajaran: Int? = null,
     @SerializedName("owner")
     val owner: DashboardOwner? = null, // Menggunakan DashboardOwner
     @SerializedName("asisten")
@@ -100,7 +100,7 @@ data class DashboardProject(
     @SerializedName("week_period")
     val weekPeriod: String? = null,
     @SerializedName("grade")
-    val grade: Int? = null
+    val grade: Double? = null
 )
 
 // Kelas untuk objek "owner" di Dashboard Project (Mirip Dosen)
@@ -131,15 +131,8 @@ data class DashboardAssistant(
     val nim: String? = null
 )
 
-
-// ... (Data Class yang sudah ada: LoginRequest, LoginResponse, User, ProjectResponse, dll.)
-// ... (Interface ApiService yang sudah ada)
-
 interface DashboardApiService {
-    /**
-     * Endpoint untuk mendapatkan data Dashboard Asisten/Mahasiswa.
-     * Menggunakan model DashboardAsisten
-     */
+
     @GET("api/dashboard/mahasiswa")
-    suspend fun getDashboardMhsData(@Header("Authorization") token: String): Response<DashboardAsisten>
+    suspend fun getDashboardMhsData(@Header("Authorization") token: String): Response<DashboardMahasiswa>
 }
