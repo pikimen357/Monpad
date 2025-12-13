@@ -153,9 +153,17 @@ viewModel: DashboardAsistenViewModel
                     )
                     Spacer(modifier = Modifier.height(30.dp))
 
+                    val rataanString = dashboardAsisten?.rata_rata.toString()
+
+                    // Pastikan nilainya adalah angka sebelum memformat
+                    val rataanProgres = rataanString.toDoubleOrNull()?.let {
+                        // Menggunakan String.format()
+                        String.format("%.2f", it)
+                    } ?: rataanString
+
                     StatMhsCard(
                         indicatorColor = CardPurple,
-                        count = dashboardAsisten?.rata_rata.toString(),
+                        count = rataanProgres,
                         label = "Rata Rata Progres"
                     )
 
