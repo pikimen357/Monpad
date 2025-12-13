@@ -42,15 +42,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.monpad.MainActivity
 import kotlin.reflect.KClass
 import java.text.SimpleDateFormat
-import java.util.Locale
 import com.example.monpad.jpcompose.ui.theme.Purple40
 import com.example.monpad.network.DashboardGroup
 import com.example.monpad.network.DashboardProject
 import com.example.monpad.viewmodel.DashboardMahasiswaViewModel
 import com.example.monpad.viewmodel.UiState
 import android.util.Log
+import com.example.monpad.NilaiAkhir
 import com.example.monpad.ProgresProyek
 import com.example.monpad.network.Grades
+import java.text.DecimalFormat
+import java.util.Locale
 
 class DashboardMahasiswaScreen : ComponentActivity() {
 
@@ -255,13 +257,18 @@ fun NilaiCardSection(
     dproject: DashboardProject?,
     grade: Grades?
 ) {
-    // Data dummy untuk tampilan nilai
-    val nilaiAkhir = grade?.finalGrade.toString()
-//   val nilaiProyek = dproject?.grade.toString()
+
     val nilaiProyek = grade?.projectGrade.toString()
     val nilaiUAS = "-"
     val nilaiUTS = "-"
     val nilaiPersonal = grade?.personalGrade.toString()
+
+    val finalGradeString = grade?.finalGrade.toString()
+    // Pastikan nilainya adalah angka sebelum memformat
+    val nilaiAkhir = finalGradeString.toDoubleOrNull()?.let {
+        // Menggunakan String.format()
+        String.format("%.2f", it)
+    } ?: finalGradeString
 
     Box(
         modifier = Modifier
@@ -487,7 +494,7 @@ fun AppMahasiswaDrawer(
     val menuItems = listOf(
         ScreenMhs("Beranda", Icons.Default.Home, MainActivity::class), // Navigasi ke MainActivity
         ScreenMhs("Progress Proyek", Icons.Default.FolderShared, ProgresProyek::class), // Navigasi ke Progres Proyek
-        ScreenMhs("Nilai Akhir", Icons.Default.Star,  ProjectActivity::class), // Navigasi ke Nilai Akhir
+        ScreenMhs("Nilai Akhir", Icons.Default.Star, NilaiAkhir::class), // Navigasi ke Nilai Akhir
     )
 
     val logoutStructure = listOf(

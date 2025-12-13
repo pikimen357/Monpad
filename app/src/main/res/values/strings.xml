@@ -3,4 +3,5 @@
     <string name="title_activity_login">Login</string>
     <string name="title_activity_dashboard_dosen_screen">DashboardDosenScreen</string>
     <string name="title_activity_progress_proyek_screen">ProgressProyekScreen</string>
+    <string name="title_activity_nilai_akhir_screen">NilaiAkhirScreen</string>
 </resources>

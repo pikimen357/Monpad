@@ -16,6 +16,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Monpad">
         <activity
+            android:name=".jpcompose.NilaiAkhirScreen"
+            android:exported="false"
+            android:label="@string/title_activity_nilai_akhir_screen"
+            android:theme="@style/Theme.Monpad" />
+        <activity
+            android:name=".NilaiAkhir"
+            android:exported="false" />
+        <activity
             android:name=".jpcompose.ProgressProyekScreen"
             android:exported="false"
             android:label="@string/title_activity_progress_proyek_screen"

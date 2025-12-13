@@ -49,7 +49,9 @@ import com.example.monpad.network.DashboardProject
 import com.example.monpad.viewmodel.DashboardMahasiswaViewModel
 import com.example.monpad.viewmodel.UiState
 import android.util.Log
+import androidx.compose.ui.text.font.FontFamily
 import com.example.monpad.network.Grades
+import com.example.monpad.network.Student
 
 // Data class untuk menu item Mahasiswa
 data class ScreenMhs(
@@ -154,6 +156,12 @@ fun ProgresProyekContent(viewModel: DashboardMahasiswaViewModel) {
 
                         ProjectInfoCard(dproject = dproject, dgroup = dgroup)
 
+                        Spacer(Modifier.height(16.dp))
+
+                        // 2. BAGIAN ANGGOTA TIM (BARU - Menggunakan data dgroup dari API)
+                        TeamMembersSection(
+                            group = dgroup // Meneruskan seluruh objek DashboardGroup
+                        )
                     }
                 }
             }
@@ -208,6 +216,130 @@ fun HeaderProgresProyekSection(onMenuClick: () -> Unit) {
                 )
             }
         }
+    }
+}
+
+// Perubahan pada parameter input: dari TeamMember menjadi Student
+@Composable
+fun StudentCard(student: Student) {
+    // Fungsi untuk mendapatkan inisial dari username
+    fun getInitial(name: String): String {
+        return name.split(" ")
+            .mapNotNull { it.firstOrNull()?.toString() }
+            .take(2)
+            .joinToString("")
+            .uppercase()
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color.White)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Avatar Inisial
+        Box(
+            modifier = Modifier
+                .size(48.dp)
+                .clip(CircleShape)
+                .background(PurpleBackground), // Ganti warna sesuai tema Anda
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = getInitial(student.username), // Mengambil inisial dari username
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        Spacer(Modifier.width(16.dp))
+
+        // Detail Anggota
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = student.username, // Nama Mahasiswa
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = student.jabatan, // Jabatan (Role) Mahasiswa
+                fontSize = 14.sp,
+                color = Color.Gray
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = "NIM: ${student.nim}", // NIM Mahasiswa
+                fontSize = 12.sp,
+                color = Color.Black,
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = FontFamily.SansSerif
+            )
+        }
+
+        // NIM/ID di sisi kanan (opsional, bisa juga menggunakan jabatan)
+        Text(
+            text = student.jabatan, // Atau bisa tampilkan ID: student.id.toString()
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.primary,
+            fontSize = 14.sp
+        )
+    }
+}
+
+@Composable
+fun TeamMembersSection(
+    group: DashboardGroup?
+) {
+    // Cek apakah data grup dan anggotanya ada
+    val members = group?.anggota ?: emptyList()
+    val groupTitle = group?.nama ?: "Anggota Tim"
+
+    // Tampilkan jika ada anggota
+    if (members.isNotEmpty()) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+        ) {
+            // Judul Bagian
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Anggota Tim (${groupTitle})",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                Icon(
+                    imageVector = Icons.Default.PeopleAlt,
+                    contentDescription = "Team Icon",
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            Spacer(Modifier.height(8.dp))
+
+            // Daftar Anggota Tim
+            members.forEach { student ->
+                StudentCard(student = student) // Menggunakan StudentCard
+                Spacer(Modifier.height(8.dp)) // Jarak antar kartu anggota
+            }
+        }
+    } else {
+        // Tampilkan pesan jika anggota tidak ditemukan
+        Text(
+            text = "Belum ada anggota tim ditemukan.",
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
+            fontStyle = FontStyle.Italic,
+            color = Color.Gray
+        )
     }
 }
 
