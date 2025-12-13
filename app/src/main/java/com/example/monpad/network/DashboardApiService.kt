@@ -145,7 +145,6 @@ data class ResponseData(
 )
 
 // Dashboard Asisten
-
 data class DataDetailAsisten(
     val jumlah_mahasiswa: String,
     val rata_rata: String,

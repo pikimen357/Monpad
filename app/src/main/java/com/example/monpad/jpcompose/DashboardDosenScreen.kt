@@ -73,22 +73,6 @@ fun DashboardDosenContent(
     val error by viewModel.error.collectAsState()
 
     val context = LocalContext.current
-    LaunchedEffect(dashboardState) {
-        when (val state = dashboardState) {
-            is UiState.Loading -> {
-                Toast.makeText(context, "Loading dashboard data...", Toast.LENGTH_SHORT).show()
-            }
-            is UiState.Success -> {
-                Toast.makeText(context, "Data loaded successfully!", Toast.LENGTH_SHORT).show()
-                Log.d("DashboardUI", "Jumlah Mhs: ${dashboardDetail?.jumlah_mahasiswa}")
-                Log.d("DashboardUI", "Jumlah Proyek: ${dashboardDetail?.jumlah_projek}")
-            }
-            is UiState.Error -> {
-                Toast.makeText(context, "Error: ${state.message}", Toast.LENGTH_LONG).show()
-            }
-            else -> {}
-        }
-    }
 
     LaunchedEffect(Unit) {
         viewModel.getDashboardDosenData()

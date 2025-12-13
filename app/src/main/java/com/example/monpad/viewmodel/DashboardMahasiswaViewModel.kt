@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import android.util.Log
+import com.example.monpad.network.Grades
 
 /**
  * ViewModel untuk mengambil data dashboard mahasiswa/asisten.
@@ -30,6 +31,9 @@ class DashboardMahasiswaViewModel(application: Application) : AndroidViewModel(a
 
     private val _dgroup = MutableStateFlow<DashboardGroup?>(null)
     val dgroup: StateFlow<DashboardGroup?> = _dgroup
+
+    private val _grade = MutableStateFlow<Grades?>(null)
+    val grade: StateFlow<Grades?> = _grade
 
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
@@ -81,6 +85,7 @@ class DashboardMahasiswaViewModel(application: Application) : AndroidViewModel(a
                     val firstGroup = dashboardData.data?.groups?.firstOrNull()
                     _dgroup.value = firstGroup
                     _dproject.value = firstGroup?.project
+                    _grade.value = dashboardData.data?.grades
 
                     Log.d("DashboardVM", "Project Name: ${_dproject.value?.nama_projek}")
                     Log.d("DashboardVM", "Project Description: ${_dproject.value?.deskripsi}")

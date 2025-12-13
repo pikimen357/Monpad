@@ -83,21 +83,21 @@ viewModel: DashboardAsistenViewModel
     val dashboardAsisten by viewModel.dshAstDetail.collectAsState()
     val error by viewModel.error.collectAsState()
 
-    LaunchedEffect(dashboardState) {
-        when (val state = dashboardState) {
-            is UiState.Loading -> {
-                Toast.makeText(context, "Loading dashboard data...", Toast.LENGTH_SHORT).show()
-            }
-            is UiState.Success -> {
-                Toast.makeText(context, "Data loaded successfully!", Toast.LENGTH_SHORT).show()
-                Log.d("DashboardUI", "Jumlah Mahasiswa: ${dashboardAsisten?.jumlah_mahasiswa}")
-            }
-            is UiState.Error -> {
-                Toast.makeText(context, "Error: ${state.message}", Toast.LENGTH_LONG).show()
-            }
-            else -> {}
-        }
-    }
+//    LaunchedEffect(dashboardState) {
+//        when (val state = dashboardState) {
+//            is UiState.Loading -> {
+//                Toast.makeText(context, "Loading dashboard data...", Toast.LENGTH_SHORT).show()
+//            }
+//            is UiState.Success -> {
+//                Toast.makeText(context, "Data loaded successfully!", Toast.LENGTH_SHORT).show()
+//                Log.d("DashboardUI", "Jumlah Mahasiswa: ${dashboardAsisten?.jumlah_mahasiswa}")
+//            }
+//            is UiState.Error -> {
+//                Toast.makeText(context, "Error: ${state.message}", Toast.LENGTH_LONG).show()
+//            }
+//            else -> {}
+//        }
+//    }
 
     LaunchedEffect(Unit) {
         viewModel.getDashboardAsistenData()

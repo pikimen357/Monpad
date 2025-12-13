@@ -49,6 +49,7 @@ import com.example.monpad.network.DashboardProject
 import com.example.monpad.viewmodel.DashboardMahasiswaViewModel
 import com.example.monpad.viewmodel.UiState
 import android.util.Log
+import com.example.monpad.network.Grades
 
 // Data class untuk menu item Mahasiswa
 data class ScreenMhs(
@@ -90,24 +91,10 @@ fun DashboardMahasiswaContent(viewModel: DashboardMahasiswaViewModel) {
     val dashboardState by viewModel.dashboardState.collectAsState()
     val dproject by viewModel.dproject.collectAsState()
     val dgroup by viewModel.dgroup.collectAsState()
+    val grade by viewModel.grade.collectAsState()
     val error by viewModel.error.collectAsState()
 
     val context = LocalContext.current
-    LaunchedEffect(dashboardState) {
-        when (val state = dashboardState) {
-            is UiState.Loading -> {
-                Toast.makeText(context, "Loading dashboard data...", Toast.LENGTH_SHORT).show()
-            }
-            is UiState.Success -> {
-                Toast.makeText(context, "Data loaded successfully!", Toast.LENGTH_SHORT).show()
-                Log.d("DashboardUI", "Project: ${dproject?.nama_projek}")
-            }
-            is UiState.Error -> {
-                Toast.makeText(context, "Error: ${state.message}", Toast.LENGTH_LONG).show()
-            }
-            else -> {}
-        }
-    }
 
     LaunchedEffect(Unit) {
         viewModel.getDashboardData()
@@ -164,7 +151,7 @@ fun DashboardMahasiswaContent(viewModel: DashboardMahasiswaViewModel) {
                             .clip(RoundedCornerShape(10.dp))
                             .padding(top = 25.dp, start = 4.dp, end = 4.dp)
                     ) {
-                        NilaiCardSection()
+                        NilaiCardSection(dproject = dproject, grade = grade)
 
                         Spacer(modifier = Modifier.height(50.dp))
 
@@ -278,13 +265,17 @@ fun ProjectInfoCard(dproject: DashboardProject?, dgroup: DashboardGroup?) {
 }
 
 @Composable
-fun NilaiCardSection() {
+fun NilaiCardSection(
+    dproject: DashboardProject?,
+    grade: Grades?
+) {
     // Data dummy untuk tampilan nilai
-    val nilaiAkhir = "90"
-    val nilaiProyek = "80"
-    val nilaiUAS = "90"
-    val nilaiUTS = "88"
-    val nilaiPersonal = "79"
+    val nilaiAkhir = grade?.finalGrade.toString()
+//   val nilaiProyek = dproject?.grade.toString()
+    val nilaiProyek = grade?.projectGrade.toString()
+    val nilaiUAS = "-"
+    val nilaiUTS = "-"
+    val nilaiPersonal = grade?.personalGrade.toString()
 
     Box(
         modifier = Modifier
