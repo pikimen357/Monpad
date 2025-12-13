@@ -410,7 +410,7 @@ fun AppMhsDrawer(
     // Menu structure - PERBAIKAN NAVIGASI
     val menuItems = listOf(
         ScreenAst("Beranda", Icons.Default.Home, MainActivity::class),
-        ScreenAst("Proyek & Kelompok", Icons.Default.FolderShared, ProjectActivity::class),
+        ScreenAst("Proyek & Kelompok", Icons.Default.FolderShared, ProjectAsistenActivity::class),
         ScreenAst("Data Mahasiswa", Icons.Default.People, Mahasiswa::class)
     )
 
