@@ -2,6 +2,7 @@ package com.example.monpad.jpcompose
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -30,11 +31,14 @@ import com.example.monpad.ProjectActivity
 import com.example.monpad.jpcompose.ui.theme.*
 import kotlinx.coroutines.launch
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.compose.ui.text.font.FontWeight
 import com.example.monpad.Mahasiswa
 import com.example.monpad.MainActivity
 import kotlin.reflect.KClass
 import com.example.monpad.jpcompose.ui.theme.Purple40
+import com.example.monpad.viewmodel.DashboardAsistenViewModel
+import com.example.monpad.viewmodel.UiState
 
 // Data class untuk menu item
 data class ScreenAst(
@@ -52,11 +56,14 @@ data class MenuSectionAst(
 )
 
 class DashboardAsisten : ComponentActivity() {
+
+    private val viewModel: DashboardAsistenViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MonpadTheme {
-                DashboardAssitenContent()
+                DashboardAssitenContent(viewModel)
             }
         }
     }
@@ -64,12 +71,42 @@ class DashboardAsisten : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardAssitenContent() {
+fun DashboardAssitenContent(
+viewModel: DashboardAsistenViewModel
+) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val currentActivity = DashboardAsisten::class
     val context = LocalContext.current
 
+    val dashboardState by viewModel.dashboardState.collectAsState()
+    val dashboardAsisten by viewModel.dshAstDetail.collectAsState()
+    val error by viewModel.error.collectAsState()
+
+    LaunchedEffect(dashboardState) {
+        when (val state = dashboardState) {
+            is UiState.Loading -> {
+                Toast.makeText(context, "Loading dashboard data...", Toast.LENGTH_SHORT).show()
+            }
+            is UiState.Success -> {
+                Toast.makeText(context, "Data loaded successfully!", Toast.LENGTH_SHORT).show()
+                Log.d("DashboardUI", "Jumlah Mahasiswa: ${dashboardAsisten?.jumlah_mahasiswa}")
+            }
+            is UiState.Error -> {
+                Toast.makeText(context, "Error: ${state.message}", Toast.LENGTH_LONG).show()
+            }
+            else -> {}
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.getDashboardAsistenData()
+    }
+
+
+    if (error != null) {
+        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -110,15 +147,15 @@ fun DashboardAssitenContent() {
                 ) {
                     StatMhsCard(
                         indicatorColor = CardPurple,
-                        count = "50",
+                        count = dashboardAsisten?.jumlah_mahasiswa.toString(),
                         label = "Mahasiswa Terdaftar"
                     )
                     Spacer(modifier = Modifier.height(30.dp))
 
                     StatMhsCard(
                         indicatorColor = CardPurple,
-                        count = "20",
-                        label = "Proyek Aktif"
+                        count = dashboardAsisten?.rata_rata.toString(),
+                        label = "Rata Rata Progres"
                     )
 
                     Spacer(modifier = Modifier.height(50.dp))
@@ -578,10 +615,11 @@ fun DrawerMhsItem(item: ScreenAst, isSelected: Boolean, onClick: () -> Unit) {
 
 
 
-@Preview(showBackground = true)
-@Composable
-fun DashboarAstPreview() {
-    MonpadTheme {
-        DashboardAssitenContent()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun DashboarAstPreview() {
+//
+//    MonpadTheme {
+//        DashboardAssitenContent()
+//    }
+//}

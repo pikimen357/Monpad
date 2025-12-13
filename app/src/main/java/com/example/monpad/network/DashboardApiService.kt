@@ -131,8 +131,39 @@ data class DashboardAssistant(
     val nim: String? = null
 )
 
+// Dashboard Dosen
+
+data class DataDetail(
+    val jumlah_mahasiswa: String,
+    val jumlah_asisten: String,
+    val jumlah_projek: String,
+    val rata_rata: String
+)
+
+data class ResponseData(
+    val data: DataDetail
+)
+
+// Dashboard Asisten
+
+data class DataDetailAsisten(
+    val jumlah_mahasiswa: String,
+    val rata_rata: String,
+)
+
+data class ResponseDataAsisten(
+    val data: DataDetailAsisten
+)
+
 interface DashboardApiService {
 
     @GET("api/dashboard/mahasiswa")
     suspend fun getDashboardMhsData(@Header("Authorization") token: String): Response<DashboardMahasiswa>
+
+    @GET("api/dashboard/dosen")
+    suspend fun getDashboardDsnData(@Header("Authorization") token: String): Response<ResponseData>
+
+    @GET("api/dashboard/asisten")
+    suspend fun getDashboardAstData(@Header("Authorization") token: String): Response<ResponseDataAsisten>
+
 }

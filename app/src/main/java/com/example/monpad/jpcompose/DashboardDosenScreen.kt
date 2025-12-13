@@ -2,6 +2,8 @@ package com.example.monpad.jpcompose
 
 import android.content.Intent // Import untuk navigasi Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.rememberScrollState
@@ -31,7 +33,10 @@ import com.example.monpad.* // Import semua Activity (Dosen, Mahasiswa, ProjectA
 import kotlin.reflect.KClass // Digunakan untuk currentActivity
 
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.monpad.jpcompose.ui.theme.Purple40
+import com.example.monpad.viewmodel.DashboardDosenViewModel
+import com.example.monpad.viewmodel.UiState
 import kotlinx.coroutines.launch
 
 // Define custom colors based on the image's theme
@@ -56,9 +61,43 @@ class DashboardDosen : ComponentActivity() {
 // Main Composable that holds the entire screen structure
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardDosenContent() {
+fun DashboardDosenContent(
+    viewModel: DashboardDosenViewModel = viewModel()
+) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
+    val dashboardState by viewModel.dashboardState.collectAsState()
+    val dashboardDetail by viewModel.dshdetail.collectAsState()
+    val uiState by viewModel.dashboardState.collectAsState()
+    val error by viewModel.error.collectAsState()
+
+    val context = LocalContext.current
+    LaunchedEffect(dashboardState) {
+        when (val state = dashboardState) {
+            is UiState.Loading -> {
+                Toast.makeText(context, "Loading dashboard data...", Toast.LENGTH_SHORT).show()
+            }
+            is UiState.Success -> {
+                Toast.makeText(context, "Data loaded successfully!", Toast.LENGTH_SHORT).show()
+                Log.d("DashboardUI", "Jumlah Mhs: ${dashboardDetail?.jumlah_mahasiswa}")
+                Log.d("DashboardUI", "Jumlah Proyek: ${dashboardDetail?.jumlah_projek}")
+            }
+            is UiState.Error -> {
+                Toast.makeText(context, "Error: ${state.message}", Toast.LENGTH_LONG).show()
+            }
+            else -> {}
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.getDashboardDosenData()
+    }
+
+
+    if (error != null) {
+        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+    }
 
     // Activity yang saat ini aktif (digunakan untuk menandai menu yang dipilih)
     val currentActivity = DashboardDosen::class
@@ -102,11 +141,13 @@ fun DashboardDosenContent() {
                         .padding(horizontal = 16.dp)
                         .padding(top = 16.dp, bottom = 30.dp)
                 ) {
-                    StatCard(indicatorColor = CardPurple, count = "50", label = "Mahasiswa Terdaftar")
+                    StatCard(indicatorColor = CardPurple, count = dashboardDetail?.jumlah_mahasiswa.toString(), label = "Mahasiswa Terdaftar")
                     Spacer(modifier = Modifier.height(16.dp))
-                    StatCard(indicatorColor = CardBlue, count = "5", label = "Asisten Praktikum")
+                    StatCard(indicatorColor = CardBlue, count = dashboardDetail?.jumlah_asisten.toString(), label = "Asisten Praktikum")
                     Spacer(modifier = Modifier.height(16.dp))
-                    StatCard(indicatorColor = CardPurple, count = "20", label = "Proyek Aktif")
+                    StatCard(indicatorColor = CardPurple, count = dashboardDetail?.jumlah_projek.toString(), label = "Proyek Aktif")
+                    Spacer(modifier = Modifier.height(16.dp))
+                    StatCard(indicatorColor = CardPurple, count = dashboardDetail?.rata_rata.toString(), label = "Progres Nilai Kelas")
                     Spacer(modifier = Modifier.height(32.dp))
                     ProjectsAndGroupsSection()
                 }

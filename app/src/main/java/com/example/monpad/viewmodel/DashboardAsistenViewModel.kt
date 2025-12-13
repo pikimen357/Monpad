@@ -6,7 +6,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.monpad.data.TokenManager
 import com.example.monpad.network.DataDetail // Import DataDetail dari data model baru
+import com.example.monpad.network.DataDetailAsisten
 import com.example.monpad.network.ResponseData // Import ResponseData dari data model baru
+import com.example.monpad.network.ResponseDataAsisten
 import com.example.monpad.network.RetrofitClient // Pastikan RetrofitClient mengarah ke ApiService yang benar
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,15 +16,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class DashboardDosenViewModel(application: Application) : AndroidViewModel(application) {
+class DashboardAsistenViewModel(application: Application) : AndroidViewModel(application) {
 
-    // Mengganti dshdetail dengan MutableStateFlow untuk menampung DataDetail
-    private val _dshdetail  = MutableStateFlow<DataDetail?>(null)
-    val dshdetail: StateFlow<DataDetail?> = _dshdetail.asStateFlow()
+    private val _dshAstDetail  = MutableStateFlow<DataDetailAsisten?>(null)
+    val dshAstDetail: StateFlow<DataDetailAsisten?> = _dshAstDetail.asStateFlow()
 
     // Mengganti DashboardMahasiswa dengan ResponseData (sesuai struktur respons baru)
-    private val _dashboardState = MutableStateFlow<UiState<ResponseData>>(UiState.Idle)
-    val dashboardState: StateFlow<UiState<ResponseData>> = _dashboardState.asStateFlow()
+    private val _dashboardState = MutableStateFlow<UiState<ResponseDataAsisten>>(UiState.Idle)
+    val dashboardState: StateFlow<UiState<ResponseDataAsisten>> = _dashboardState.asStateFlow()
 
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
@@ -31,7 +32,7 @@ class DashboardDosenViewModel(application: Application) : AndroidViewModel(appli
     private val tokenManager = TokenManager(application)
 
 
-    fun getDashboardDosenData(){
+    fun getDashboardAsistenData(){
         viewModelScope.launch {
             _dashboardState.value = UiState.Loading
             // 1. Ambil Token
@@ -45,10 +46,10 @@ class DashboardDosenViewModel(application: Application) : AndroidViewModel(appli
 
             // 2. Lakukan Panggilan API
             try {
-                Log.d("DashboardVM", "Calling API: /api/dashboard/dosen")
+                Log.d("DashboardVM", "Calling API: /api/dashboard/asisten")
 
                 // Pastikan RetrofitClient.dashboardApiService mengimplementasikan DashboardApiService yang baru
-                val response = RetrofitClient.dashboardApiService.getDashboardDsnData("Bearer $token")
+                val response = RetrofitClient.dashboardApiService.getDashboardAstData("Bearer $token")
 
                 Log.d("DashboardVM", "Response Code: ${response.code()}")
 
@@ -59,7 +60,7 @@ class DashboardDosenViewModel(application: Application) : AndroidViewModel(appli
                     _dashboardState.value = UiState.Success(dashboardData)
 
                     // ✅ PENYESUAIAN: Simpan DataDetail ke _dshdetail
-                    _dshdetail.value = dashboardData.data
+                    _dshAstDetail.value = dashboardData.data
 
                     // Log data yang didapat
                     Log.d("DashboardVM", "Dashboard Data: $dashboardData")
