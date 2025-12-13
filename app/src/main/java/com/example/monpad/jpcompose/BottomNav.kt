@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.monpad.DashboardAsisten
 import com.example.monpad.LoginActivity
 import com.example.monpad.ProjectActivity
 
@@ -90,7 +91,7 @@ fun BottomNavigationBarAst() {
         NavigationBarItem(
             selected = false,
             onClick = {
-                context.startActivity(Intent(context, DashboardDosen::class.java))
+                context.startActivity(Intent(context, DashboardAsisten::class.java))
             },
             icon = {
                 Icon(

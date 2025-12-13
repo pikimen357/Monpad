@@ -35,6 +35,7 @@ import androidx.activity.viewModels
 import androidx.compose.ui.text.font.FontWeight
 import com.example.monpad.Mahasiswa
 import com.example.monpad.MainActivity
+import com.example.monpad.ProjectAsistenActivity
 import kotlin.reflect.KClass
 import com.example.monpad.jpcompose.ui.theme.Purple40
 import com.example.monpad.viewmodel.DashboardAsistenViewModel
@@ -193,7 +194,8 @@ viewModel: DashboardAsistenViewModel
 
                                 Button(
                                     onClick = {
-                                        context.startActivity(Intent(context, ProjectActivity::class.java))
+                                        context.startActivity(Intent(context,
+                                            ProjectAsistenActivity::class.java))
                                     },
                                     shape = RoundedCornerShape(8.dp),
                                     colors = ButtonDefaults.buttonColors(containerColor = Purple40)
