@@ -49,22 +49,8 @@ import com.example.monpad.network.DashboardProject
 import com.example.monpad.viewmodel.DashboardMahasiswaViewModel
 import com.example.monpad.viewmodel.UiState
 import android.util.Log
+import com.example.monpad.ProgresProyek
 import com.example.monpad.network.Grades
-
-// Data class untuk menu item Mahasiswa
-data class ScreenMhs(
-    val title: String,
-    val icon: ImageVector,
-    val route: KClass<out ComponentActivity>
-)
-
-// Data class untuk menu section
-data class MenuSectionMhs(
-    val title: String,
-    val items: List<ScreenMhs>,
-    val isCollapsible: Boolean = false,
-    val initialExpanded: Boolean = false
-)
 
 class DashboardMahasiswaScreen : ComponentActivity() {
 
@@ -500,7 +486,7 @@ fun AppMahasiswaDrawer(
     // Menu structure - PERBAIKAN NAVIGASI
     val menuItems = listOf(
         ScreenMhs("Beranda", Icons.Default.Home, MainActivity::class), // Navigasi ke MainActivity
-        ScreenMhs("Progress Proyek", Icons.Default.FolderShared, ProjectActivity::class), // Navigasi ke Progres Proyek
+        ScreenMhs("Progress Proyek", Icons.Default.FolderShared, ProgresProyek::class), // Navigasi ke Progres Proyek
         ScreenMhs("Nilai Akhir", Icons.Default.Star,  ProjectActivity::class), // Navigasi ke Nilai Akhir
     )
 

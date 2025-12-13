@@ -2,4 +2,5 @@
     <string name="app_name">Monpad</string>
     <string name="title_activity_login">Login</string>
     <string name="title_activity_dashboard_dosen_screen">DashboardDosenScreen</string>
+    <string name="title_activity_progress_proyek_screen">ProgressProyekScreen</string>
 </resources>
